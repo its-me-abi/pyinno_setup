@@ -19,7 +19,7 @@ keywords = [   "compiler", "inno setup" , "exe", "installer" ,"generate"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python"
-] 75
+] 
 
 requires-python = ">=3.6"
 dependencies = []
