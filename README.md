@@ -1,6 +1,6 @@
 
 ## 🚀 pyinno_setup
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python](https://img.shields.io/badge/Python-3.6%2B-blue.svg)](https://www.python.org/)
 [![Issues](https://img.shields.io/github/issues/its-me-abi/pyinno_setup.svg)](https://github.com/its-me-abi/pyinno_setup/issues)
 
