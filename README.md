@@ -1,6 +1,6 @@
 
 ## 🚀 pyinno_setup
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python](https://img.shields.io/badge/Python-3.6%2B-blue.svg)](https://www.python.org/)
 [![Issues](https://img.shields.io/github/issues/its-me-abi/pyinno_setup.svg)](https://github.com/its-me-abi/pyinno_setup/issues)
 
@@ -13,8 +13,12 @@ it is an python wrapper for programmatically building installable exe from iss s
 - **Seamless Inno Setup Integration:** Harness the full power of Inno Setup, embedded and ready to use.
 
 ### 📦 Installation
-
-```from source:
+from pypi using pip
+```
+pip install pyinno-setup
+```
+from github source:
+```
 git clone https://github.com/its-me-abi/pyinno_setup.git
 
 ```
