@@ -58,7 +58,7 @@ class setup:
             raise BuildError("error in compiling usinng ISCC.exe,probably CLI arguemnt or internal error", result)
 
 
-def build(input_path, outfile = "" ,outfolder = ""  ,extra_commands =[] ):
+def build(input_path,outfolder = "", outfile = "" ,extra_commands =[] ):
     setupman = setup( input_path ,outfolder = outfolder ,  outfile = outfile  ,extra_commands = extra_commands )
     logger.info(f"cli arguments are { setupman.get_cli_list() } " )
     try:
