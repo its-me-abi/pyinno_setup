@@ -1,8 +1,13 @@
 from pyinno_setup import runit
+from pyargman import ArgManager
 from pathlib import Path
 
+import logging
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
 """
-this is used for calling embedded innosetuip compiler exe file,(required files are in libs folder)
+this is used for calling embedded innosetup compiler exe file,(required files are in libs folder)
 it will give iss file as input and output is exe file,
 output folder canbe changed all other settings are controlled by contents of iss file
 to generate iss file try my other module 'pyinno_gen'
@@ -13,32 +18,63 @@ date : 12/7/2025
 """
 
 current_folder = Path(__file__).parent.resolve()
-EXE_PATH = Path(current_folder) / "libs/Inno6/ISCC.exe"
+EXE_PATH = current_folder / "libs/Inno6/ISCC.exe"
 
-def build( input_iss_file_path, outfolder = "" ,extra_commands =[]):
-    "if outfolder isa empty then exe file willbe generated in subfolder of code"
-    if not EXE_PATH.exists():
-        print("embedded exe file not found,probably script or exe files moved cwd = ", current_folder)
-        return
+class Error(Exception):
+    pass
 
-    command = [EXE_PATH]
-    if outfolder:
-        command += [f"/O{outfolder}" ]
-    if extra_commands:
-        command += extra_commands
-    if input_iss_file_path:
-        command += [ input_iss_file_path]
+class BuildError(Error):
+    SUCCESS = 0
+    CLI_OR_INTERAL_ERROR = 1
+    SCRIPT_ERROR = 2
+    def __init__(self,msg,val):
+        self.message = msg
+        self.value = val
 
-    if runit.run_subprocess(command) == 0:
-       return True
+class setup:
+    def __init__(self,script, outfolder = "", outfile = ""   ,extra_commands =[] ):
+        if not EXE_PATH.exists():
+            raise Error("embedded ISCC.exe file not found,probably script or exe files moved cwd = ", current_folder)
+        self.argman =  ArgManager(EXE_PATH)
+        if outfile:
+            self.argman.set_arg(f"/F{outfile}" , True )
+        if outfolder:
+            self.argman.set_arg(f"/O{outfolder}" , True )
+        if extra_commands:
+            self.argman.set_arg(extra_commands , True )
+        if script:
+            self.argman.set_arg(script, True )
+
+    def get_cli_list(self):
+        return self.argman.tolist()
+
+    def build(self):
+        result = runit.run_subprocess( self.get_cli_list())
+        if result == BuildError.SUCCESS:
+            return True
+        elif result== BuildError.SCRIPT_ERROR:
+            raise BuildError("error in compiling usinng ISCC.exe,probably input iss script has errors", result)
+        elif result== BuildError.CLI_OR_INTERAL_ERROR:
+            raise BuildError("error in compiling usinng ISCC.exe,probably CLI arguemnt or internal error", result)
+
+
+def build(input_path, outfile = "" ,outfolder = ""  ,extra_commands =[] ):
+    setupman = setup( input_path ,outfolder = outfolder ,  outfile = outfile  ,extra_commands = extra_commands )
+    logger.info(f"cli arguments are { setupman.get_cli_list() } " )
+    try:
+        if setupman.build():
+            return True
+    except:
+        pass
 
 
 if __name__ == "__main__":
 
-    input_path = Path(current_folder) / "data/template.iss"
+    input_path = current_folder / "data/template.iss"
     output_folder = "output"
-    print("### building exe " ,input_path )
-    if build (input_path,output_folder):
-        print("### successfully built ")
-    else:
-        print("### build failed ")
+    logger.info(f"### building exe {input_path}" )
+    try:
+        if build( input_path , outfolder = output_folder,outfile="xxx" ):
+            logging.info("### successfully built by innosetup ###")
+    except:
+        logger.info("### innosetup build failed ###")

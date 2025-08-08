@@ -1,6 +1,6 @@
 
 ## 🚀 pyinno_setup
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://mit-license.org)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python](https://img.shields.io/badge/Python-3.6%2B-blue.svg)](https://www.python.org/)
 [![Issues](https://img.shields.io/github/issues/its-me-abi/pyinno_setup.svg)](https://github.com/its-me-abi/pyinno_setup/issues)
 
@@ -32,6 +32,19 @@ if inno.build("inputfolder/template.iss", "outfolder"):
     print("### successfully built")
 else:
     print("### build failed ")
+```
+
+another example using class
+
+```
+    setup = inno.setup ( "inputfolder/template.iss", outfolder = "outfolder" , outfile="xxx" )
+    print("cli arguemnts are " , setup.get_cli_list())
+    try:
+        if setup.build():
+            print("### successfully built by innosetup ###")
+    except:
+        print("### innosetup build failed ###")
+
 ```
 
 ### 💡 Why pyinno_setup?
@@ -73,4 +86,3 @@ MIT License. See [LICENSE](LICENSE).
 
 - [wiki](https://github.com/its-me-abi/pyinno_setup/wiki)
 - [Inno Setup Documentation](https://jrsoftware.org/ishelp/index.php)
-
