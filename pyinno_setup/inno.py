@@ -21,13 +21,15 @@ current_folder = Path(__file__).parent.resolve()
 EXE_PATH = current_folder / "libs/Inno6/ISCC.exe"
 
 class Error(Exception):
-    pass
+    def __init__(self, msg):
+        logging.error(msg)
 
 class BuildError(Error):
     SUCCESS = 0
     CLI_OR_INTERAL_ERROR = 1
     SCRIPT_ERROR = 2
     def __init__(self,msg,val):
+        super().__init__(msg)
         self.message = msg
         self.value = val
 
@@ -35,6 +37,8 @@ class setup:
     def __init__(self,script, outfolder = "", outfile = ""   ,extra_commands =[] ):
         if not EXE_PATH.exists():
             raise Error("embedded ISCC.exe file not found,probably script or exe files moved cwd = ", current_folder)
+        if not Path(script).exists():
+            raise Error(" iss script file does not exist")
         self.argman =  ArgManager(EXE_PATH)
         if outfile:
             self.argman.set_arg(f"/F{outfile}" , True )
@@ -59,9 +63,9 @@ class setup:
 
 
 def build(input_path,outfolder = "", outfile = "" ,extra_commands =[] ):
-    setupman = setup( input_path ,outfolder = outfolder ,  outfile = outfile  ,extra_commands = extra_commands )
-    logger.info(f"cli arguments are { setupman.get_cli_list() } " )
     try:
+        setupman = setup(input_path, outfolder=outfolder, outfile=outfile, extra_commands=extra_commands)
+        logger.info(f"cli arguments are {setupman.get_cli_list()} ")
         if setupman.build():
             return True
     except:
@@ -70,11 +74,10 @@ def build(input_path,outfolder = "", outfile = "" ,extra_commands =[] ):
 
 if __name__ == "__main__":
 
-    input_path = current_folder / "data/template.iss"
+    input_path = current_folder / "data/etemplate.iss"
     output_folder = "output"
     logger.info(f"### building exe {input_path}" )
-    try:
-        if build( input_path , outfolder = output_folder,outfile="xxx" ):
-            logging.info("### successfully built by innosetup ###")
-    except:
+    if build( input_path , outfolder = output_folder, outfile = "xxx" ):
+        logging.info("### successfully built by innosetup ###")
+    else:
         logger.info("### innosetup build failed ###")
