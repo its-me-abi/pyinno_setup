@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 requires-python = ">=3.6"
-dependencies = ["pyargman>=0.0.4"]
+dependencies = ["pyargman>=0.0.5"]
 
 [project.urls]
 Homepage = "https://github.com/its-me-abi/pyinno_setup"
