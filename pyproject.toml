@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyinno_setup"
-version = "0.0.5"
+version = "0.0.6"
 description = "module for creating installable exe from iss file using innosetup compiler"
 authors = [
 	{ name = "keralaboy", email = "keralaboypypi@keralaboy.anonaddy.com" }

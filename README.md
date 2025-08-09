@@ -36,7 +36,7 @@ else:
 
 another example using class
 
-```
+```python
     setup = inno.setup ( "inputfolder/template.iss", outfolder = "outfolder" , outfile="xxx" )
     print("cli arguemnts are " , setup.get_cli_list())
     try:

@@ -35,10 +35,11 @@ class BuildError(Error):
 
 class setup:
     def __init__(self,script, outfolder = "", outfile = ""   ,extra_commands =[] ):
-        if not EXE_PATH.exists():
-            raise Error("embedded ISCC.exe file not found,probably script or exe files moved cwd = ", current_folder)
-        if not Path(script).exists():
-            raise Error(" iss script file does not exist")
+        self.script = script
+        self.outfolder = outfolder
+        self.outfile = outfile
+        self.EXE_PATH = EXE_PATH
+
         self.argman =  ArgManager(EXE_PATH)
         if outfile:
             self.argman.set_arg(f"/F{outfile}" , True )
@@ -48,12 +49,20 @@ class setup:
             self.argman.set_arg(extra_commands , True )
         if script:
             self.argman.set_arg(script, True )
+        
+        self.logger = logging.getLogger("innosetup")
+        self.logger.setLevel("DEBUG")
 
     def get_cli_list(self):
         return self.argman.tolist()
 
     def build(self):
-        result = runit.run_subprocess( self.get_cli_list())
+        if not self.EXE_PATH.exists():
+            raise Error("embedded ISCC.exe file not found,probably script or exe files moved cwd = ", current_folder)
+        if not Path(self.script).exists():
+            raise Error(" input iss script file does not exist")
+
+        result = runit.run_subprocess( self.get_cli_list() , logger= self.logger)
         if result == BuildError.SUCCESS:
             return True
         elif result== BuildError.SCRIPT_ERROR:
@@ -74,10 +83,10 @@ def build(input_path,outfolder = "", outfile = "" ,extra_commands =[] ):
 
 if __name__ == "__main__":
 
-    input_path = current_folder / "data/etemplate.iss"
+    input_path = current_folder / "data/template.iss"
     output_folder = "output"
     logger.info(f"### building exe {input_path}" )
     if build( input_path , outfolder = output_folder, outfile = "xxx" ):
-        logging.info("### successfully built by innosetup ###")
+        logger.info("### successfully built by innosetup ###")
     else:
-        logger.info("### innosetup build failed ###")
+        logger.error("### innosetup build failed ###")
