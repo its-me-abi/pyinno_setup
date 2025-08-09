@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyinno_setup"
-version = "0.0.4"
+version = "0.0.5"
 description = "module for creating installable exe from iss file using innosetup compiler"
 authors = [
 	{ name = "keralaboy", email = "keralaboypypi@keralaboy.anonaddy.com" }
@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 requires-python = ">=3.6"
-dependencies = ["pyargman>=0.0.5"]
+dependencies = ["pyargman>=0.0.4"]
 
 [project.urls]
 Homepage = "https://github.com/its-me-abi/pyinno_setup"
